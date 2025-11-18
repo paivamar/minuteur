@@ -1,14 +1,35 @@
-document.getElementById("start").onclick = () => {
-  let total = parseInt(document.getElementById("duration").value);
-  let remaining = total;
-  const display = document.getElementById("display");
+let minutes = 0;
+let seconds = 0;
 
-  // Fonction pour convertir en minute:seconde
-  const formatTime = (sec) => {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m}:${s.toString().padStart(2, "0")}`;
+const minDisplay = document.getElementById("minutes");
+const secDisplay = document.getElementById("seconds");
+
+const updateDisplay = () => {
+  minDisplay.textContent = minutes;
+  secDisplay.textContent = seconds.toString().padStart(2, "0");
+};
+
+document.querySelectorAll(".inc").forEach(btn => {
+  btn.onclick = () => {
+    if (btn.dataset.type === "min") minutes++;
+    else seconds = (seconds + 1) % 60;
+    updateDisplay();
   };
+});
+
+document.querySelectorAll(".dec").forEach(btn => {
+  btn.onclick = () => {
+    if (btn.dataset.type === "min" && minutes > 0) minutes--;
+    else if (btn.dataset.type === "sec") {
+      seconds = (seconds - 1 + 60) % 60;
+    }
+    updateDisplay();
+  };
+});
+
+document.getElementById("start").onclick = () => {
+  let total = minutes * 60 + seconds;
+  let remaining = total;
 
   const speak = (text) => {
     const msg = new SpeechSynthesisUtterance(text);
@@ -17,15 +38,19 @@ document.getElementById("start").onclick = () => {
   };
 
   speak("Minuteur démarré");
-  display.textContent = formatTime(remaining);
 
   const interval = setInterval(() => {
     remaining--;
-    display.textContent = formatTime(remaining);
 
-    // Annonce toutes les 10 secondes
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+
+    minutes = m;
+    seconds = s;
+    updateDisplay();
+
     if (remaining % 10 === 0 && remaining > 0) {
-      speak(formatTime(remaining));
+      speak(`${m} minutes ${s} secondes`);
     }
 
     if (remaining <= 0) {
