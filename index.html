@@ -6,11 +6,26 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <h1>Minuteur vocalisé</h1>
-  <label>Durée (en secondes) : </label>
-  <input type="number" id="duration" value="60" />
-  <button id="start">Démarrer</button>
-  <div id="display">0:00</div>
+
+  <div id="time-controls">
+    <div class="block">
+      <h2>Minutes</h2>
+      <button class="inc" data-type="min">+</button>
+      <div id="minutes" class="time">0</div>
+      <button class="dec" data-type="min">-</button>
+    </div>
+
+    <div class="block">
+      <h2>Secondes</h2>
+      <button class="inc" data-type="sec">+</button>
+      <div id="seconds" class="time">00</div>
+      <button class="dec" data-type="sec">-</button>
+    </div>
+  </div>
+
+  <button id="start" class="start-btn">Démarrer</button>
 
   <script src="script.js"></script>
 </body>
